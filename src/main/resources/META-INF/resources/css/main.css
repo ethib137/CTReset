@@ -1,0 +1,11 @@
+.ct-reset-root .entry-card.selected .card {
+	background: #EEE;
+}
+
+.ct-reset-root .card h2 {
+	margin-top: 0;
+}
+
+.ct-reset-root .alert-card {
+	width: 100%;
+}

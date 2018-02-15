@@ -1,0 +1,11 @@
+Bundle-Name: SoyCTReset
+Bundle-SymbolicName: soyctreset
+Bundle-Version: 1.0.0
+Provide-Capability:\
+	soy;\
+		type="SoyCTReset";\
+		version:Version="1.0.0"
+Require-Capability:\
+	soy;\
+		filter:="(type=metal)"
+-includeresource: package.json

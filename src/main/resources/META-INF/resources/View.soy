@@ -1,0 +1,124 @@
+{namespace View}
+
+/**
+ * Prints the portlet main view.
+ */
+{template .render}
+	{@param id: string}
+	{@param? _handleActiveUsersChange: any}
+	{@param? _handlesScoreInput: any}
+	{@param? _handleSegmentSelect: any}
+	{@param? _handleSegmentUserSelect: any}
+	{@param? _handleUpdateScorePoints: any}
+	{@param? activeUsers: bool}
+	{@param? score: int}
+	{@param? segments: ?}
+	{@param? segmentUsers: ?}
+	{@param? selectedSegmentIndex: int}
+	{@param? selectedSegmentUserIndex: int}
+
+	<div class="ct-reset-root" id="{$id}">
+		<h3>{msg desc=""}reset-content-targeting-score-points{/msg}</h3>
+
+		<div class="splitter splitter-spaced">
+			{msg desc=""}select-a-segment{/msg}
+		</div>
+
+		{if $segments}
+			<ul class="display-style-icon list-unstyled row">
+				{foreach $segment in $segments}
+					<li class="entry-card lfr-asset-folder entry-display-style {$selectedSegmentIndex == index($segment) ? 'selected' : ''}">
+						<div>
+							<label>
+								<div class="card card-horizontal taglib-horizontal-card" data-onClick="{$_handleSegmentSelect}" value="{index($segment)}">
+									<div class="card-row card-row-padded selectable">
+										<div class="card-col-field">
+											{$segment.nameCurrentValue}
+										</div>
+									</div>
+								</div>
+							</label>
+						</div>
+					</li>
+				{ifempty}
+					<li class="alert-card entry-card lfr-asset-folder entry-display-style">
+						<div class="alert-info alert-info-content alert liferayalert liferayalert-content">
+							{msg desc=""}there-are-no-segments-on-this-site{/msg}
+						</div>
+					</li>
+				{/foreach}
+			</ul>
+
+			{if $selectedSegmentIndex >= 0}
+				<div class="form-group form-inline input-checkbox-wrapper">
+					<label for="{$id}_activeUsers">
+						<input class="field toggle-switch" id="{$id}_activeUsers" name="activeUsers" data-onClick="{$_handleActiveUsersChange}" type="checkbox" checked="{$activeUsers}">
+
+						<span class="toggle-switch-label">
+							{msg desc=""}show-active-users{/msg}
+						</span>
+
+						<span aria-hidden="true" class="toggle-switch-bar">
+							<span class="toggle-switch-handle" data-label-off="No" data-label-on="Yes"></span>
+						</span>
+					</label>
+				</div>
+			{/if}
+		{/if}
+
+		{if $segmentUsers}
+			<div class="splitter splitter-spaced">
+				{msg desc=""}select-a-user{/msg}
+			</div>
+		
+			<ul class="display-style-icon list-unstyled row">
+				{foreach $segmentUser in $segmentUsers}
+					<li class="entry-card lfr-asset-folder entry-display-style  {$selectedSegmentUserIndex == index($segmentUser) ? 'selected' : ''}">
+						<div>
+							<label>
+								<div class="card card-horizontal taglib-horizontal-card" data-onClick="{$_handleSegmentUserSelect}" value="{index($segmentUser)}">
+									<div class="card-row card-row-padded selectable">
+										<div class="card-col-field">
+											<div>
+												<h2>{$segmentUser.userName}</h2>
+											</div>
+											<div>{msg desc=""}score-{$segmentUser.points}{/msg}</div>
+										</div>
+									</div>
+								</div>
+							</label>
+						</div>
+					</li>
+				{ifempty}
+					<li class="alert-card entry-card lfr-asset-folder entry-display-style">
+						<div class="alert-info alert-info-content alert liferayalert liferayalert-content">
+							{if $activeUsers}
+								{msg desc=""}there-are-no-users-that-are-active-in-the-selected-segment{/msg}
+							{else}
+								{msg desc=""}there-are-no-users-that-are-inactive-in-the-selected-segment{/msg}
+							{/if}
+						</div>
+					</li>
+				{/foreach}
+			</ul>
+
+			{if $selectedSegmentUserIndex >= 0}
+				<div class="splitter splitter-spaced">
+					{msg desc=""}set-user-score-points{/msg}
+				</div>
+
+				<div class="form-group input-String-wrapper has-success">
+					<label class="control-label" for="{$id}_newPoints">
+						{msg desc=""}set-score-points-to{/msg}
+					</label>
+
+					<input class="field form-control lfr-input-text success-field" data-onInput="{$_handlesScoreInput}" id="{$id}_newPoints" name="{$id}_newPoints" type="number" value="{$score}" maxlength="75" aria-describedby="" aria-required="true">
+				</div>
+
+				<button class="btn btn-lg btn-primary btn-default" {if not ($score >= 0)}disabled="disabled"{/if} data-onClick="{$_handleUpdateScorePoints}" type="submit">
+					<span class="lfr-btn-label">{msg desc=""}save{/msg}</span>
+				</button>
+			{/if}
+		{/if}
+	</div>
+{/template}
